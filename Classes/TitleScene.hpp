@@ -19,6 +19,10 @@ public:
     virtual bool init();
     
     CREATE_FUNC(Title);
+
+    
+private:
+    void startButtonCallback(cocos2d::Ref* pSender);
 };
 
 #endif /* TitleScene_hpp */
