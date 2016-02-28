@@ -58,8 +58,15 @@ void Game::touchTrumpCards()
     
     // カードの番号の取りうる値を設定する
     std::vector<int> numbers;
-    for (int i = 1; i <= 52; i++) {
-        numbers.push_back(i);
+    int i = 0;
+    while (i < (xMax * yMax / 2)) {
+        int number = arc4random() % 52 + 1;
+        if (std::find(numbers.begin(), numbers.end(), number) != numbers.end()) {
+        } else {
+            numbers.push_back(number);
+            numbers.push_back(number);
+            i++;
+        }
     }
     
     // カードを配置する
