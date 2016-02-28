@@ -96,7 +96,7 @@ void Game::touchTrumpCards()
             
             auto trumpCardMenu = Menu::create(trumpCard, NULL);
             trumpCardMenu->setPosition(Vec2::ZERO);
-            trumpCardMenu->setTag(index);
+            trumpCardMenu->setTag(numbers[index]);
             
             this->addChild(trumpCardMenu, 2);
             
@@ -110,5 +110,15 @@ void Game::trumpCardButtonCallback(Ref* pSender)
 {
     // 開いてあるカードが無ければ、
     // 開いてあるカードとして保存
-    // int openCardIndex = pSender->tag();
+    
+    Node* target = (Node*)pSender;
+    
+    //裏カードを作成する
+    auto backgroundImage = Sprite::create("images/trump/trump000.png");
+    backgroundImage->setPosition(target->getPosition());
+    backgroundImage->setTag(target->getTag());
+    this->addChild(backgroundImage);
+    
+    //表カードを削除する
+    target->removeFromParentAndCleanup(true);
 }
