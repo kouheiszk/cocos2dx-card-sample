@@ -49,26 +49,28 @@ bool Game::init()
 
 void Game::touchTrumpCards()
 {
-    Size visibleSize = Director::getInstance()->getVisibleSize();
-    Vec2 origin = Director::getInstance()->getVisibleOrigin();
-    
-    // カードの番号の取りうる値を設定する
-    
-    // numbersをシャッフルする
-    
-    // カードを4x4に配置する
     int xMax = 4;
     int yMax = 4;
     float cardMargin = 10;
     
+    Size visibleSize = Director::getInstance()->getVisibleSize();
+    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    
+    // カードの番号の取りうる値を設定する
+    std::vector<int> numbers;
+    for (int i = 1; i <= 52; i++) {
+        numbers.push_back(i);
+    }
+    
+    // カードを配置する
     for (int x = 0; x < xMax; x++) {
         for (int y = 0; y < yMax; y++) {
             //ランダムで1つの値を取得する
-            int index = rand() % 52 + 1;
+            int index = arc4random() % numbers.size();
             
             //カードを生成する
-            std::string normalCardImageName = StringUtils::format("images/trump/trump%03d.png", index);
-            std::string highlightedCardImageName = StringUtils::format("images/trump/trump%03d.png", index);
+            std::string normalCardImageName = StringUtils::format("images/trump/trump%03d.png", numbers[index]);
+            std::string highlightedCardImageName = StringUtils::format("images/trump/trump%03d.png", numbers[index]);
             auto trumpCard = MenuItemImage::create(normalCardImageName,
                                                    highlightedCardImageName,
                                                    CC_CALLBACK_1(Game::trumpCardButtonCallback, this));
@@ -90,6 +92,9 @@ void Game::touchTrumpCards()
             trumpCardMenu->setTag(index);
             
             this->addChild(trumpCardMenu, 2);
+            
+            // 数値配列から値を削除する
+            numbers.erase(numbers.begin() + index);
         }
     }
 }
