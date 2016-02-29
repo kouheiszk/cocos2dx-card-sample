@@ -7,6 +7,16 @@
 //
 
 #include "GameScene.hpp"
+#include <random>
+
+#define CARD_SUIT_TYPE_NUM 4 // カードの種類
+#define CARD_NUM_OF_SUIT 13 // 1種類あたりのカード枚数
+
+#define CARD_X_NUM 4 // 横方向のカードの枚数
+#define CARD_Y_NUM 5 // 縦方向のカードの枚数
+#define CARD_MARGIN 10 // カード間の最小間隔
+
+#define CARD_SHOWING_ZORDER 1
 
 USING_NS_CC;
 
@@ -42,83 +52,117 @@ bool Game::init()
     /////////////////////////////
     // トランプ配置
     
-    touchTrumpCards();
+    this->initGame();
     
     return true;
 }
 
-void Game::touchTrumpCards()
+void Game::initGame()
 {
-    int xMax = 4;
-    int yMax = 4;
-    float cardMargin = 10;
-    
-    Size visibleSize = Director::getInstance()->getVisibleSize();
-    Vec2 origin = Director::getInstance()->getVisibleOrigin();
-    
-    // カードの番号の取りうる値を設定する
-    std::vector<int> numbers;
-    int i = 0;
-    while (i < (xMax * yMax / 2)) {
-        int number = arc4random() % 52 + 1;
-        if (std::find(numbers.begin(), numbers.end(), number) != numbers.end()) {
-        } else {
-            numbers.push_back(number);
-            numbers.push_back(number);
-            i++;
+    this->initCards();
+    this->showInitCards();
+}
+
+void Game::initCards()
+{
+    // カードの全パターンを列挙
+    std::vector<Card> cards;
+    for (int type = 0; type < CARD_SUIT_TYPE_NUM; type++) {
+        for (int number = 0; number < CARD_NUM_OF_SUIT; number++) {
+            // カードを生成
+            Card card;
+            card.number = number;
+            card.type = (CardType)type;
+            
+            // カードを追加
+            cards.push_back(card);
         }
     }
     
-    // カードを配置する
-    for (int x = 0; x < xMax; x++) {
-        for (int y = 0; y < yMax; y++) {
-            //ランダムで1つの値を取得する
-            int index = arc4random() % numbers.size();
-            
-            //カードを生成する
-            std::string normalCardImageName = StringUtils::format("images/trump/trump%03d.png", numbers[index]);
-            std::string highlightedCardImageName = StringUtils::format("images/trump/trump%03d.png", numbers[index]);
-            auto trumpCard = MenuItemImage::create(normalCardImageName,
-                                                   highlightedCardImageName,
-                                                   CC_CALLBACK_1(Game::trumpCardButtonCallback, this));
-            
-            double xCardScale = ((visibleSize.width - cardMargin * (xMax + 1)) / xMax) / trumpCard->getContentSize().width;
-            double yCardScale = ((visibleSize.height - cardMargin * (yMax + 1)) / yMax) / trumpCard->getContentSize().height;
-            double cardScale = MIN(xCardScale, yCardScale);
-            Size cardSize = Size(trumpCard->getContentSize().width * cardScale,
-                                 trumpCard->getContentSize().height * cardScale);
-            trumpCard->setScaleX(cardScale);
-            trumpCard->setScaleY(cardScale);
-            
-            trumpCard->setPosition(Point(origin.x + cardSize.width / 2 + x * cardSize.width + cardMargin * (x + 1),
-                                         origin.y + cardSize.height / 2 + y * cardSize.height + cardMargin * (y + 1)));
-            
-            
-            auto trumpCardMenu = Menu::create(trumpCard, NULL);
-            trumpCardMenu->setPosition(Vec2::ZERO);
-            trumpCardMenu->setTag(numbers[index]);
-            
-            this->addChild(trumpCardMenu, 2);
-            
-            // 数値配列から値を削除する
-            numbers.erase(numbers.begin() + index);
+    // 必要な枚数、組み合わせに絞る
+    _cards.clear();
+    for (int i = 0; i < CARD_X_NUM * CARD_Y_NUM / 2; i++) {
+        std::random_device rd;
+        std::mt19937 rand = std::mt19937(rd());
+        
+        int index = std::uniform_int_distribution<int>(0, (int)cards.size() - 1)(rand);
+        auto card = cards[index];
+        cards.erase(cards.begin() + index);
+        
+        // 神経衰弱なので同じカードを2枚しこむ
+        _cards.push_back(card);
+        _cards.push_back(card);
+    }
+}
+
+Card Game::getCard()
+{
+    std::random_device rd;
+    std::mt19937 rand = std::mt19937(rd());
+    
+    int index = std::uniform_int_distribution<int>(0, (int)_cards.size() - 1)(rand);
+    auto card = _cards[index];
+    _cards.erase(_cards.begin() + index);
+    
+    return card;
+}
+
+void Game::createCard(PositionIndex positionIndex, int tag)
+{
+    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    double cardScale = this->cardScale();
+    
+    auto card = Sprite::create("images/trump/z01.png");
+    
+    Size cardSize = Size(card->getContentSize().width * cardScale,
+                         card->getContentSize().height * cardScale);
+    
+    card->setPosition(Vec2(origin.x + cardSize.width / 2 + positionIndex.x * cardSize.width + CARD_MARGIN * (positionIndex.x + 1),
+                           origin.y + cardSize.height / 2 + positionIndex.y * cardSize.height + CARD_MARGIN * (positionIndex.y + 1)));
+    card->setScaleX(cardScale);
+    card->setScaleY(cardScale);
+    card->setTag(tag);
+    
+    this->addChild(card, CARD_SHOWING_ZORDER);
+}
+
+void Game::showInitCards()
+{
+    for (int tag = 0; tag < CARD_X_NUM * CARD_Y_NUM; tag++) {
+        auto card = this->getChildByTag(tag);
+        if (card) {
+            // カードが画面に残っている場合は消す
+            card->removeFromParentAndCleanup(true);
+        }
+    }
+    
+    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    
+    for (int x = 0; x < CARD_X_NUM; x++) {
+        for (int y = 0; y < CARD_Y_NUM; y++) {
+            PositionIndex positionIndex;
+            positionIndex.x = x;
+            positionIndex.y = y;
+            this->createCard(positionIndex, x + y);
         }
     }
 }
 
-void Game::trumpCardButtonCallback(Ref* pSender)
+double Game::cardScale()
 {
-    // 開いてあるカードが無ければ、
-    // 開いてあるカードとして保存
+    static double cardScale = 0;
     
-    Node* target = (Node*)pSender;
+    if (cardScale == 0) {
+        Size visibleSize = Director::getInstance()->getVisibleSize();
+        Vec2 origin = Director::getInstance()->getVisibleOrigin();
+        
+        auto card = Sprite::create("images/trump/z01.png");
+        double scaleX = ((visibleSize.width - CARD_MARGIN * (CARD_X_NUM + 1)) / CARD_X_NUM) / card->getContentSize().width;
+        double scaleY = ((visibleSize.height - CARD_MARGIN * (CARD_Y_NUM + 1)) / CARD_Y_NUM) / card->getContentSize().height;
+        
+        cardScale = MIN(scaleX, scaleY);
+    }
     
-    //裏カードを作成する
-    auto backgroundImage = Sprite::create("images/trump/trump000.png");
-    backgroundImage->setPosition(target->getPosition());
-    backgroundImage->setTag(target->getTag());
-    this->addChild(backgroundImage);
-    
-    //表カードを削除する
-    target->removeFromParentAndCleanup(true);
+    return cardScale;
 }
+

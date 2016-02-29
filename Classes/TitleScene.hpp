@@ -14,12 +14,10 @@
 class Title : public cocos2d::Layer
 {
 public:
-    static cocos2d::Scene* createScene();
+    static cocos2d::Scene* createScene(); // Titleクラスのシーン作成
+    virtual bool init(); // 初期化処理
     
-    virtual bool init();
-    
-    CREATE_FUNC(Title);
-
+    CREATE_FUNC(Title); // create関数作成マクロ
     
 private:
     void startButtonCallback(cocos2d::Ref* pSender);

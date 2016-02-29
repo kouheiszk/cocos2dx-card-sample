@@ -11,14 +11,43 @@
 
 #include "cocos2d.h"
 
+enum CardType
+{
+    Clubs = 0,
+    Diamonds,
+    Hearts,
+    Spades
+};
+
+struct Card
+{
+    int number;
+    CardType type;
+};
+
+struct PositionIndex
+{
+    int x;
+    int y;
+};
+
 class Game : public cocos2d::Layer
 {
 public:
-    static cocos2d::Scene* createScene();
+    static cocos2d::Scene* createScene(); // Gameクラスのシーン作成
+    virtual bool init(); // 初期化処理
     
-    virtual bool init();
+    CREATE_FUNC(Game); // create関数作成マクロ
     
-    CREATE_FUNC(Game);
+protected:
+    std::vector<Card> _cards; // カード情報
+    void initCards(); // カードを初期化する
+    Card getCard(); // カードを取得
+    
+    void createCard(PositionIndex positionIndex, int tag); // positionにカードを作成する
+    void showInitCards(); // カードを表示
+    void initGame(); // ゲームの初期化
+    double cardScale(); // カードのスケール
     
 private:
     void touchTrumpCards();
