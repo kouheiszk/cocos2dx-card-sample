@@ -18,6 +18,8 @@
 		46880B8919C43A87006E1F66 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46880B8419C43A87006E1F66 /* AppDelegate.cpp */; };
 		48455F9E1C737C04007880F7 /* TitleScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48455F9C1C737C04007880F7 /* TitleScene.cpp */; };
 		48455F9F1C737C04007880F7 /* TitleScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48455F9C1C737C04007880F7 /* TitleScene.cpp */; };
+		48B8FFB71C87507E00992ABF /* CardSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48B8FFB51C87507E00992ABF /* CardSprite.cpp */; };
+		48B8FFB81C87507E00992ABF /* CardSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48B8FFB51C87507E00992ABF /* CardSprite.cpp */; };
 		48F9A0151C7CB8A8003D8FA4 /* GameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F9A0131C7CB8A8003D8FA4 /* GameScene.cpp */; };
 		48F9A0161C7CB8A8003D8FA4 /* GameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F9A0131C7CB8A8003D8FA4 /* GameScene.cpp */; };
 		503AE0F817EB97AB00D1A890 /* Icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 503AE0F617EB97AB00D1A890 /* Icon.icns */; };
@@ -110,6 +112,8 @@
 		46880B8519C43A87006E1F66 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		48455F9C1C737C04007880F7 /* TitleScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TitleScene.cpp; sourceTree = "<group>"; };
 		48455F9D1C737C04007880F7 /* TitleScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TitleScene.hpp; sourceTree = "<group>"; };
+		48B8FFB51C87507E00992ABF /* CardSprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CardSprite.cpp; sourceTree = "<group>"; };
+		48B8FFB61C87507E00992ABF /* CardSprite.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CardSprite.hpp; sourceTree = "<group>"; };
 		48F9A0131C7CB8A8003D8FA4 /* GameScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameScene.cpp; sourceTree = "<group>"; };
 		48F9A0141C7CB8A8003D8FA4 /* GameScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GameScene.hpp; sourceTree = "<group>"; };
 		503AE0F617EB97AB00D1A890 /* Icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Icon.icns; sourceTree = "<group>"; };
@@ -295,6 +299,8 @@
 				48455F9D1C737C04007880F7 /* TitleScene.hpp */,
 				48F9A0131C7CB8A8003D8FA4 /* GameScene.cpp */,
 				48F9A0141C7CB8A8003D8FA4 /* GameScene.hpp */,
+				48B8FFB51C87507E00992ABF /* CardSprite.cpp */,
+				48B8FFB61C87507E00992ABF /* CardSprite.hpp */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -488,6 +494,7 @@
 				48F9A0151C7CB8A8003D8FA4 /* GameScene.cpp in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
 				48455F9E1C737C04007880F7 /* TitleScene.cpp in Sources */,
+				48B8FFB71C87507E00992ABF /* CardSprite.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -498,6 +505,7 @@
 				48F9A0161C7CB8A8003D8FA4 /* GameScene.cpp in Sources */,
 				46880B8919C43A87006E1F66 /* AppDelegate.cpp in Sources */,
 				503AE10517EB98FF00D1A890 /* main.cpp in Sources */,
+				48B8FFB81C87507E00992ABF /* CardSprite.cpp in Sources */,
 				48455F9F1C737C04007880F7 /* TitleScene.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -677,6 +685,7 @@
 					"$(SRCROOT)/../cocos2d/extensions",
 					"$(SRCROOT)/../cocos2d/external",
 					"$(SRCROOT)/../cocos2d/external/chipmunk/include/chipmunk",
+					"$(SRCROOT)/../Libraries",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
@@ -707,6 +716,7 @@
 					"$(SRCROOT)/../cocos2d/extensions",
 					"$(SRCROOT)/../cocos2d/external",
 					"$(SRCROOT)/../cocos2d/external/chipmunk/include/chipmunk",
+					"$(SRCROOT)/../Libraries",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;

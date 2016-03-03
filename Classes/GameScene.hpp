@@ -10,26 +10,7 @@
 #define GameScene_hpp
 
 #include "cocos2d.h"
-
-enum CardType
-{
-    Clubs = 0,
-    Diamonds,
-    Hearts,
-    Spades
-};
-
-struct Card
-{
-    int number;
-    CardType type;
-};
-
-struct PositionIndex
-{
-    int x;
-    int y;
-};
+#include "CardSprite.hpp"
 
 class Game : public cocos2d::Layer
 {

@@ -9,14 +9,14 @@
 #include "GameScene.hpp"
 #include <random>
 
+#define CARD_SHOWING_ZORDER 1
+
 #define CARD_SUIT_TYPE_NUM 4 // カードの種類
 #define CARD_NUM_OF_SUIT 13 // 1種類あたりのカード枚数
 
 #define CARD_X_NUM 4 // 横方向のカードの枚数
 #define CARD_Y_NUM 5 // 縦方向のカードの枚数
 #define CARD_MARGIN 10 // カード間の最小間隔
-
-#define CARD_SHOWING_ZORDER 1
 
 USING_NS_CC;
 
@@ -71,7 +71,7 @@ void Game::initCards()
         for (int number = 0; number < CARD_NUM_OF_SUIT; number++) {
             // カードを生成
             Card card;
-            card.number = number;
+            card.number = number + 1; // カードの番号は1-13
             card.type = (CardType)type;
             
             // カードを追加
@@ -112,18 +112,19 @@ void Game::createCard(PositionIndex positionIndex, int tag)
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     double cardScale = this->cardScale();
     
-    auto card = Sprite::create("images/trump/z01.png");
+    auto card = getCard();
+    auto cardSprite = CardSprite::create(card, positionIndex);
     
-    Size cardSize = Size(card->getContentSize().width * cardScale,
-                         card->getContentSize().height * cardScale);
+    Size cardSize = Size(cardSprite->getContentSize().width * cardScale,
+                         cardSprite->getContentSize().height * cardScale);
     
-    card->setPosition(Vec2(origin.x + cardSize.width / 2 + positionIndex.x * cardSize.width + CARD_MARGIN * (positionIndex.x + 1),
-                           origin.y + cardSize.height / 2 + positionIndex.y * cardSize.height + CARD_MARGIN * (positionIndex.y + 1)));
-    card->setScaleX(cardScale);
-    card->setScaleY(cardScale);
-    card->setTag(tag);
+    cardSprite->setPosition(Vec2(origin.x + cardSize.width / 2 + positionIndex.x * cardSize.width + CARD_MARGIN * (positionIndex.x + 1),
+                                 origin.y + cardSize.height / 2 + positionIndex.y * cardSize.height + CARD_MARGIN * (positionIndex.y + 1)));
+    cardSprite->setScaleX(cardScale);
+    cardSprite->setScaleY(cardScale);
+    cardSprite->setTag(tag);
     
-    this->addChild(card, CARD_SHOWING_ZORDER);
+    this->addChild(cardSprite, CARD_SHOWING_ZORDER);
 }
 
 void Game::showInitCards()
